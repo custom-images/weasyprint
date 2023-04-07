@@ -1,4 +1,4 @@
-# WeasyPrint Docker Images (Unofficial)
+# WeasyPrint Docker Image
 
 [![Docker](../../actions/workflows/docker.yml/badge.svg)](../../actions/workflows/docker.yml)
 
@@ -15,7 +15,7 @@ You'll need [Docker](https://docker.com) installed.
 Run the following command in Windows PowerShell.
 
 ```powershell
-$ docker run --rm --volume ${PWD}:/mnt/local ghcr.io/weasyprint/weasyprint index.html out.pdf
+$ docker run --rm --volume ${PWD}:/mnt/local ghcr.io/custom-images/weasyprint index.html out.pdf
 ```
 
 #### CMD
@@ -23,7 +23,7 @@ $ docker run --rm --volume ${PWD}:/mnt/local ghcr.io/weasyprint/weasyprint index
 Run the following command in Windows Command Prompt.
 
 ```sh
-$ docker run --rm --volume %cd%:/mnt/local ghcr.io/weasyprint/weasyprint index.html out.pdf
+$ docker run --rm --volume %cd%:/mnt/local ghcr.io/custom-images/weasyprint index.html out.pdf
 ```
 
 ## 👷‍ Error Found?
@@ -37,7 +37,7 @@ This project is licensed under the [BSD 3-Clause License](https://choosealicense
 ```txt
 BSD 3-Clause License
 
-Copyright (c) 2023, WeasyPrint (Unofficial)
+Copyright (c) 2023, Custom Images
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:

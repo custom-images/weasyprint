@@ -3,32 +3,32 @@ name: "Docker"
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'  # every day at midnight
-    
+    - cron: "0 0 * * *" # every day at midnight
+
 permissions:
   contents: "write"
   packages: "write"
-  
+
 env:
   CONTAINER_REGISTRY: ghcr.io
-  CONTAINER_NAME: weasyprint/weasyprint
-  
+  CONTAINER_NAME: ${{ github.repository }}
+
 jobs:
   release:
     runs-on: "ubuntu-latest"
-    
+
     steps:
       - name: "Checkout Repository"
         uses: "actions/checkout@v3"
-        
+
       - name: "Reactivate Repository"
         uses: "custom-workflows/reactivate@latest"
-        with: 
+        with:
           commit_message: "github-actions: Reactivate repository"
           committer_username: "GitHub Actions [Bot]"
           committer_email: "github-actions[bot]@users.noreply.github.com"
           days_elapsed: 50
-          
+
       - name: "Fetch Latest Version [pypi.org]"
         id: "pypi"
         shell: "bash"
@@ -48,7 +48,7 @@ jobs:
             --head \
             --header "Authorization: Bearer $(echo ${{ secrets.GITHUB_TOKEN }} | base64 )" \
             https://${{ env.CONTAINER_REGISTRY }}/v2/${{ env.CONTAINER_NAME }}/manifests/${{ steps.pypi.outputs.latest_version }}
-            
+
       - name: "Login [ghcr.io]"
         if: ${{ steps.ghcr.outcome == 'failure' }}
         uses: "docker/login-action@v2.1.0"
@@ -56,7 +56,7 @@ jobs:
           registry: ${{ env.CONTAINER_REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: "Extract MetaData (Tags, Labels)"
         if: ${{ steps.ghcr.outcome == 'failure' }}
         id: "metadata"
@@ -69,7 +69,7 @@ jobs:
           labels: |
             org.opencontainers.image.title=WeasyPrint
             org.opencontainers.image.version=${{ steps.pypi.outputs.latest_version }}
-          
+
       - name: "Build & Push"
         if: ${{ steps.ghcr.outcome == 'failure' }}
         uses: "docker/build-push-action@v4.0.0"
